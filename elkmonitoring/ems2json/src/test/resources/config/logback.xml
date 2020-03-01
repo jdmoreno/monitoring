@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>./output/logs/process-EMS-files.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover. Make sure the path matches the one in the file element 
+				or else the rollover logs are placed in the working directory. -->
+			<fileNamePattern>./output/logs/application_%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>5MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="jsonConsole" class="ch.qos.logback.core.ConsoleAppender">
+	    <encoder>
+	      	<pattern>%msg%n</pattern>
+	    </encoder>
+	</appender>
+
+	<appender name="jsonFile" class="ch.qos.logback.core.FileAppender">
+		<file>emsStats.log</file>
+	    <encoder>
+	      <pattern>%msg%n</pattern>
+	    </encoder>
+	</appender>
+
+	<appender name="asyncJsonFile"
+		class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="jsonFile" />
+	</appender>	
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+	<logger name="jsonLogger" level="INFO" additivity="false">
+	    <appender-ref ref="asyncJsonFile" />
+	</logger>
+
+	<logger name="stdoutLogger" level="INFO">
+	    <appender-ref ref="STDOUT" />
+	</logger>
+
+</configuration>

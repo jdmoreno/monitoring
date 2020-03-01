@@ -1,0 +1,50 @@
+--- 
+- servers
+    - 
+        alias=EMS-SERVER1 
+        url=tcp://localhost:7222,tcp://localhost:7224 
+        user=admin 
+        password=
+        logDir=./log 
+        logFile=$N-$D.csv 
+        logCleanup=30 
+        - queues 
+            - 
+                pattern=sample 
+                logDir=./log\" 
+                logFile=$N-$D-Queues.csv 
+            - 
+                pattern=queue.sample 
+                logDir=./log 
+                logFile=$N-$D-Queues.csv 
+        - topics 
+            - 
+                pattern=topic.>; 
+                logDir=./log\
+                logFile=$N-$D-Topics.csv
+    - 
+        alias=EMS-SERVER2
+        url=tcp://localhost:7222,tcp://localhost:7224 
+        user=admin 
+        password=
+        logDir=./log 
+        logFile=$N-$D.csv 
+        logCleanup=30 
+        - queues 
+            - 
+                pattern=sample 
+                logDir=./log\" 
+                logFile=$N-$D-Queues.csv 
+            - 
+                pattern=queue.sample 
+                logDir=./log 
+                logFile=$N-$D-Queues.csv 
+        - topics 
+            - 
+                pattern=topic1.>; 
+                logDir=./log\
+                logFile=$N-$D-Topics.csv
+            - 
+                pattern=topic2.>; 
+                logDir=./log\
+                logFile=$N-$D-Topics.csv
