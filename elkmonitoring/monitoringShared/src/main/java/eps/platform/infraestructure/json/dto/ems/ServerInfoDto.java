@@ -18,7 +18,7 @@ public class ServerInfoDto {
 	
 	// Server information
 	@Expose private final String serverName;
-	@Expose private final String hostName;
+	@Expose private final String hostname;
 	@Expose private final String url;
 
 	@Expose private final Map<String, Object> stats = new HashMap<>();

@@ -33,7 +33,7 @@ public class DestinationInfoSerialiser implements JsonSerializer<DestinationInfo
 	    }
 	    
         result.add("serverName", new JsonPrimitive(StringUtils.defaultString(src.getServerName())));
-        result.add("hostName", new JsonPrimitive(StringUtils.defaultString(src.getHostName())));
+//        result.add("hostName", new JsonPrimitive(StringUtils.defaultString(src.getHostName())));
         result.add("destinationName", new JsonPrimitive(StringUtils.defaultString(src.getDestinationName())));
         result.add("destinationType", new JsonPrimitive(StringUtils.defaultString(src.getDestinationType())));
         result.add("store", new JsonPrimitive(StringUtils.defaultString(StringUtils.defaultString(src.getStore()))));

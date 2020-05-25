@@ -17,7 +17,7 @@ import lombok.ToString;
 public class StatsServer {
 	@Expose private final LocalDateTime timestamp;
 	@Expose private final String name;
-	@Expose private final String hostName;
+	@Expose private final String hostname;
 	@Expose private final String url;
 		
 	@Expose private final Map<String, Object> stats = new HashMap<>();
@@ -26,7 +26,7 @@ public class StatsServer {
 	public StatsServer(ServerInfo serverInfo) {
 		this.timestamp = LocalDateTime.now();
 		this.name = serverInfo.getServerName();
-		this.hostName = serverInfo.getServerHostname();
+		this.hostname = serverInfo.getServerHostname();
 		this.url = serverInfo.getURL();
 	}
 }

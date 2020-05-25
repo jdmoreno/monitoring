@@ -17,9 +17,8 @@ public class DestinationInfoDto {
 	@Expose private HeaderDto header;
 	
 	// Server information
-	// Server information
 	@Expose private final String serverName;
-	@Expose private final String hostName;
+	@Expose private final String hostname;
 	
 	// Destination information
 	@Expose private final String destinationName;

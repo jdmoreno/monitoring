@@ -31,7 +31,7 @@ public class ServerInfoSerialiser implements JsonSerializer<ServerInfoDto> {
 	    }
 	    
         result.add("serverName", new JsonPrimitive(src.getServerName()));
-        result.add("hostName", new JsonPrimitive(src.getHostName()));
+//      result.add("hostname", new JsonPrimitive(src.getHostname()));
         result.add("url", new JsonPrimitive(src.getUrl()));
 	
         final JsonElement jsonStats = context.serialize(src.getStats());

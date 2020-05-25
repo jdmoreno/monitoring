@@ -12,6 +12,7 @@ import com.tibco.tibjms.admin.TibjmsAdmin;
 import com.tibco.tibjms.admin.TibjmsAdminException;
 import com.tibco.tibjms.admin.TopicInfo;
 
+import eps.platform.infraestructure.DestinationType;
 import eps.platform.infraestructure.config.Queue;
 import eps.platform.infraestructure.config.Server;
 import eps.platform.infraestructure.config.Topic;
@@ -104,7 +105,7 @@ public class EmsServer {
 				
 				for (int i = 0; i < destination.destinationInfo.length; i++) {
 					DestinationInfo destinationInfo = destination.destinationInfo[i];							
-					StatsDestination statsDestination = new StatsDestination(destinationInfo);
+					StatsDestination statsDestination = new StatsDestination(destinationInfo, DestinationType.QUEUE);
 					
 					statsDestination.getStats().putAll(EmsLoggerConstants.getStatsMethodValues(destinationInfo, null));
 					statsDestination.getStatsInbound().putAll(EmsLoggerConstants.getStatsMethodValues(destinationInfo.getInboundStatistics(), "inbound"));
@@ -125,7 +126,7 @@ public class EmsServer {
 
 				for (int i = 0; i < destination.destinationInfo.length; i++) {
 					DestinationInfo destinationInfo = destination.destinationInfo[i];							
-					StatsDestination statsDestination = new StatsDestination(destinationInfo);
+					StatsDestination statsDestination = new StatsDestination(destinationInfo, DestinationType.TOPIC);
 					
 					statsDestination.getStats().putAll(EmsLoggerConstants.getStatsMethodValues(destination.destinationInfo[i], null));
 					statsDestination.getStatsInbound().putAll(EmsLoggerConstants.getStatsMethodValues(destination.destinationInfo[i].getInboundStatistics(), "inbound"));

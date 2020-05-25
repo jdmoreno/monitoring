@@ -57,10 +57,12 @@ public class EmsStatsToJSON implements Runnable {
     private void process(StatsCollection statsCollection) throws InterruptedException {
     	log.debug("Start logging to JSON statsCollection ...");
     	if (statsCollection != null) {
+    		
+    		// Server stats (queues/topics)
 	    	for (StatsServer statsServer : statsCollection.getStatsServers()) {
-	    		log.debug("Starting logging to JSON server: {} - hostname: {} - url: {}", statsServer.getName(), statsServer.getHostName(), statsServer.getUrl() );
+	    		log.debug("Starting logging to JSON server: {} - hostname: {} - url: {}", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl() );
 	    		// Common header
-	    		Reference reference = InMemoryDB.get(statsServer.getHostName());		
+	    		Reference reference = InMemoryDB.get(statsServer.getHostname());		
 	    		
 	    		String dataCentre = "";
 	    		String dataEnvironment = "";
@@ -72,7 +74,7 @@ public class EmsStatsToJSON implements Runnable {
 	    		}
 	    		HeaderDto header = HeaderDto.builder()
 	    			.timestamp(statsServer.getTimestamp().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-	    			.hostname(statsServer.getHostName())
+	    			.hostname(statsServer.getHostname())
 //	    			.os(this.os)
 	    			.dataCentre(dataCentre)
 	    			.environment(dataEnvironment)
@@ -82,7 +84,7 @@ public class EmsStatsToJSON implements Runnable {
 	    		ServerInfoDto serverInfoDto = ServerInfoDto.builder()
 	    				.header(header)
 	    				.serverName(statsServer.getName())
-	    				.hostName(statsServer.getHostName())
+	    				.hostname(statsServer.getHostname())
 	    				.url(statsServer.getUrl())
 	    				.build();
 	    		serverInfoDto.getStats().putAll(statsServer.getStats());
@@ -94,15 +96,15 @@ public class EmsStatsToJSON implements Runnable {
 					log.error("Exception transforming server stats to JSON - Exception info {}", e.getMessage());
 				}
 	    			    
-	    		
+	    		// Destination stats (queues/topics). Stats of the destinations associated with the curent server being processed
 	    		for (StatsDestination statsDestination : statsServer.getDestinations()) {
-	    			log.debug("Starting logging to JSON destination - server: {} - hostname: {} - url: {} - destination: {}", statsServer.getName(), statsServer.getHostName(), statsServer.getUrl(), statsDestination.getName());
+	    			log.debug("Starting logging to JSON destination - server: {} - hostname: {} - url: {} - destination: {}", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl(), statsDestination.getName());
 	    			DestinationInfoDto destinationInfoDto = DestinationInfoDto.builder()
 	    					.header(header)
 	    					.serverName(statsServer.getName())
-	    					.hostName(statsServer.getHostName())
+	    					.hostname(statsServer.getHostname())
 	    					.destinationName(statsDestination.getName())
-	    					.destinationType("")
+	    					.destinationType(statsDestination.getDestinationType().toString())
 	    					.store(statsDestination.getStore())
 	    					.staticSw(statsDestination.isStaticSw())
 	    					.temporary(statsDestination.isTemporary())
@@ -118,9 +120,9 @@ public class EmsStatsToJSON implements Runnable {
 						log.error("Exception transforming destination stats to JSON - Exception info {}", e.getCause());
 					}
 	    			
-	    			log.debug("End logging to JSON destination - server: {} - hostname: {} - url: {} - destination: {}", statsServer.getName(), statsServer.getHostName(), statsServer.getUrl(), statsDestination.getName());
+	    			log.debug("End logging to JSON destination - server: {} - hostname: {} - url: {} - destination: {}", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl(), statsDestination.getName());
 				}
-	    		log.debug("End logging to JSON server: {} - hostname: {} - url: {}", statsServer.getName(), statsServer.getHostName(), statsServer.getUrl() );
+	    		log.debug("End logging to JSON server: {} - hostname: {} - url: {}", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl() );
 	    	}    	
     	}
     	log.debug("End logging to JOSN statsCollection");

@@ -11,8 +11,16 @@ SET MAIN-CLASS=eps.platform.infraestructure.EMS2JSON
 SET INPUT="F:\eps\99.EMS"
 SET OUTPUT="D:\eps\json\EMS\[Y]\[M]\EMS_[D].json"
 
+GOTO GENERATE_HELP
+
 :: Process
+:GENERATE_STATS
 java -Dlogback.configurationFile=".\config\logback.xml" -cp %JAR-FOLDER%\%JAR-FILE%;tibjms.jar %MAIN-CLASS% -f 5 -s ./config/servers3.yaml -r ./config/ems2jsonRef.csv
+GOTO END
+
+:GENERATE_HELP
+java -Dlogback.configurationFile=".\config\logback.xml" -cp %JAR-FOLDER%\%JAR-FILE%;tibjms.jar %MAIN-CLASS% -h
+GOTO END
 
 :END
 ENDLOCAL
