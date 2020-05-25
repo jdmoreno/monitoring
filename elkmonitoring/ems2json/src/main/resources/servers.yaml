@@ -2,7 +2,7 @@
 - servers
     - 
         alias=EMS-SERVER1 
-        url=tcp://localhost:7222,tcp://localhost:7224 
+        url=tcp://ems.test:7222,tcp://localhost:7224 
         user=admin 
         password=
         logDir=./log 
@@ -24,7 +24,7 @@
                 logFile=$N-$D-Topics.csv
     - 
         alias=EMS-SERVER2
-        url=tcp://localhost:7222,tcp://localhost:7224 
+        url=tcp://ems.test:7222,tcp://localhost:7224 
         user=admin 
         password=
         logDir=./log 

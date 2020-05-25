@@ -16,6 +16,9 @@
 
 	<properties>
 		<monitoringShared.version>0.0.8-SNAPSHOT</monitoringShared.version>
+		
+		<jms.version>2.0.1</jms.version>
+		<tibco.version>8.5</tibco.version>		
 	</properties>
 
 	<dependencies>
@@ -93,9 +96,16 @@
 		
 		<!-- https://mvnrepository.com/artifact/com.tibco/tibjms -->
 		<dependency>
-		    <groupId>com.tibco.tibjms</groupId>
+		    <groupId>com.tibco</groupId>
 		    <artifactId>tibjms</artifactId>
-		    <version>8.4.1</version>
+		    <version>${tibco.version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/javax.jms/javax.jms-api -->
+		<dependency>
+		    <groupId>javax.jms</groupId>
+		    <artifactId>javax.jms-api</artifactId>
+		    <version>${jms.version}</version>
 		</dependency>
 		
 	</dependencies>

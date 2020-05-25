@@ -1,0 +1,34 @@
+servers:
+-  alias: EMS-SERVER1
+   url: tcp://ems.test:7222,tcp://ems.test:7224
+   user: admin
+   password: null
+   sslParams:
+   -  name: com.tibco.tibjms.ssl.trace
+      type: boolean
+      value: true
+   -  name: com.tibco.tibjms.ssl.trusted_certs
+      type: string
+      value: C:\tibco\ems\samples\certs\server_root.cert.pem
+   -  name: com.tibco.tibjms.ssl.expected_hostname
+      type: string
+      value: server
+   queues:
+   -  pattern: sample
+   -  pattern: queue.sample
+   topics:
+   -  pattern: topic.>;
+-  alias: EMS-SERVER2
+   url: tcp://ems.test:7222,tcp://ems.test:7224
+   user: admin
+   password: null
+   sslParams:
+   -  name: com.tibco.tibjms.ssl.enable_verify_host
+      type: boolean
+      value: false
+   queues:
+   -  pattern: sample
+   -  pattern: queue.sample
+   topics:
+   -  pattern: topic1.>;
+   -  pattern: topic2.>;

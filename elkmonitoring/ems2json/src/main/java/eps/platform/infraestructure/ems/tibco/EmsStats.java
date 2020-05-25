@@ -8,10 +8,13 @@ import com.tibco.tibjms.admin.ServerInfo;
 import com.tibco.tibjms.admin.StatData;
 import com.tibco.tibjms.admin.TopicInfo;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
-public class EmsStats {
+public class EmsStats {	
 	protected static final  List<String> serverStatsNames = new ArrayList<>();
 	protected static final List<String> queueStatsNames = new ArrayList<>();
 	protected static final List<String> topicStatsNames = new ArrayList<>();

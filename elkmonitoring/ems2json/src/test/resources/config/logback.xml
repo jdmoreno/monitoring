@@ -40,7 +40,7 @@
 	</appender>
 
 	<appender name="jsonFile" class="ch.qos.logback.core.FileAppender">
-		<file>emsStats.log</file>
+		<file>./output/logs/emsStats.log</file>
 	    <encoder>
 	      <pattern>%msg%n</pattern>
 	    </encoder>
