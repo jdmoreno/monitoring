@@ -5,7 +5,7 @@ Utility to log Tibo EMS monitoring statistics to JSON records.
 
 ### JSON output server record
 Identified by "RecordType": "EMS_STATS_SERVER"
-<code>
+<pre><code>
 {
   "RecordType": "EMS_STATS_SERVER",
   "timestamp": "2020-05-25T19:26:34.9620379",
@@ -43,11 +43,11 @@ Identified by "RecordType": "EMS_STATS_SERVER"
     "adminConnectionCount": 2
   }
 }
-</code>
+</code></pre>
 
 ### JSON output destination (queue/topic) record
 Identified by "RecordType": "EMS_STATS_DESTINATION"
-<code>
+<pre><code>
 {
   "RecordType": "EMS_STATS_DESTINATION",
   "timestamp": "2020-05-25T20:47:09.566343",
@@ -84,10 +84,10 @@ Identified by "RecordType": "EMS_STATS_DESTINATION"
     "outboundTotalBytes": 3562020
   }
 }
-</code>
+</code></pre>
 
 ## Usage
-<code>
+<pre><code>
 usage: EMS2JSON
 EMS2JSON Help
   -ch,--check           Only check the arguments. Does not process the command.
@@ -99,10 +99,10 @@ EMS2JSON Help
   -v,--version          Prints EMS2JSON version. Does not process the command.
                         Optional
 Read the documentation for further details.
-</code>
+</code></pre>
 
 ### Sample CMD to call EMS2JSON
-<code>
+<pre><code>
 :: Name:    EMS2JSON
 :: Purpose: Query EMS servers for stats, transform to json and write them in a file
 :: Output file in the logback configuration
@@ -116,14 +116,22 @@ SET MAIN-CLASS=eps.platform.infraestructure.EMS2JSON
 SET INPUT="F:\eps\99.EMS"
 SET OUTPUT="D:\eps\json\EMS\[Y]\[M]\EMS_[D].json"
 
+::GOTO GENERATE_HELP
+
 :: Process
+:GENERATE_STATS
 java -Dlogback.configurationFile=".\config\logback.xml" -cp %JAR-FOLDER%\%JAR-FILE%;tibjms.jar %MAIN-CLASS% -f 5 -s ./config/servers3.yaml -r ./config/ems2jsonRef.csv
+GOTO END
+
+:GENERATE_HELP
+java -Dlogback.configurationFile=".\config\logback.xml" -cp %JAR-FOLDER%\%JAR-FILE%;tibjms.jar %MAIN-CLASS% -h
+GOTO END
 
 :END
 ENDLOCAL
 ECHO ON
 @EXIT /B %ERRORLEVEL%
-</code>
+</code></pre>
 
 ## Configuration
 
