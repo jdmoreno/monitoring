@@ -46,7 +46,7 @@ public class DestinationInfoSerialiser implements JsonSerializer<DestinationInfo
         final JsonElement jsonStatsInboud = context.serialize(src.getStatsInbound());
         result.add("statsInbound", jsonStatsInboud);
 
-        final JsonElement jsonStatsOutbound = context.serialize(src.getStatsInbound());
+        final JsonElement jsonStatsOutbound = context.serialize(src.getStatsOutbound());
         result.add("statsOutbound", jsonStatsOutbound);
 
 		return result;
