@@ -1,7 +1,7 @@
 # EMS2JSON
 
 ## Description
-Utility to log Tibo EMS monitoring statistics to JSON records.
+Utility to log Tibco EMS monitoring statistics to JSON records.
 
 ### JSON output server record
 Identified by "RecordType": "EMS_STATS_SERVER"
