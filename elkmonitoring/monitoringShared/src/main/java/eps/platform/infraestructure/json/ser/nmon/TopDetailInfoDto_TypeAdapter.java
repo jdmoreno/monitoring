@@ -7,8 +7,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import eps.platform.infraestructure.common.Constants;
-import eps.platform.infraestructure.json.dto.nmon.TopDetailInfoDto;
-import eps.platform.infraestructure.json.dto.nmon.TopDetailInfoDto.TopDetailInfoDtoBuilder;
+import eps.platform.infraestructure.dto.nmon.TopDetailInfoDto;
+import eps.platform.infraestructure.dto.nmon.TopDetailInfoDto.TopDetailInfoDtoBuilder;
 
 /**
  * GSON type adapte that flattens {@code TopDetailInfoDto} json records

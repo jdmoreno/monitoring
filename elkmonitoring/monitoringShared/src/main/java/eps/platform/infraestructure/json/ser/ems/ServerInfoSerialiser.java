@@ -9,7 +9,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import eps.platform.infraestructure.common.Constants;
-import eps.platform.infraestructure.json.dto.ems.ServerInfoDto;
+import eps.platform.infraestructure.dto.ems.ServerInfoDto;
 
 public class ServerInfoSerialiser implements JsonSerializer<ServerInfoDto> { 
 	@Override

@@ -7,8 +7,8 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import eps.platform.infraestructure.json.dto.nmon.MemInfoDto;
-import eps.platform.infraestructure.json.dto.nmon.MemInfoDto.MemInfoDtoBuilder;
+import eps.platform.infraestructure.dto.nmon.MemInfoDto;
+import eps.platform.infraestructure.dto.nmon.MemInfoDto.MemInfoDtoBuilder;
 
 public class MemInfoDto_TypeAdapter extends TypeAdapter<MemInfoDto> {
 

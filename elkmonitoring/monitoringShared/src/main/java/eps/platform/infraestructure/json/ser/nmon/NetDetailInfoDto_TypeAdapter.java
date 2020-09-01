@@ -7,8 +7,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import eps.platform.infraestructure.common.Constants;
-import eps.platform.infraestructure.json.dto.nmon.NetDetailInfoDto;
-import eps.platform.infraestructure.json.dto.nmon.NetDetailInfoDto.NetDetailInfoDtoBuilder;
+import eps.platform.infraestructure.dto.nmon.NetDetailInfoDto;
+import eps.platform.infraestructure.dto.nmon.NetDetailInfoDto.NetDetailInfoDtoBuilder;
 
 /**
  * GSON type adapte that flattens {@code NetDetailInfoDto} json records

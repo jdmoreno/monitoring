@@ -108,7 +108,7 @@ public class EMS2JSON {
 		ScheduledFuture<?> resultEmsStatsLogger = executorEmsStatsLogger.scheduleWithFixedDelay(emsStatsLogger, 5, applicationCLI.getInterval(), TimeUnit.SECONDS);		
 		
 		// Start schedulled task to export stats to JSON
-		EmsStatsToJSON emsStatsToJSON = new EmsStatsToJSON(queue);
+		EmsStatsToJSON emsStatsToJSON = new EmsStatsToJSON(queue, applicationCLI.isSwCSV());
 		ExecutorService executorEmsStatsToJSON = Executors.newSingleThreadScheduledExecutor();
 		Future<?> resultEmsStatsToJSON = executorEmsStatsToJSON.submit(emsStatsToJSON);		
 		

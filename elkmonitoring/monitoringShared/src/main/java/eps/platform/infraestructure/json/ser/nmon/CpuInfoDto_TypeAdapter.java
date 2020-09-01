@@ -6,8 +6,8 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import eps.platform.infraestructure.json.dto.nmon.CpuInfoDto;
-import eps.platform.infraestructure.json.dto.nmon.CpuInfoDto.CpuInfoDtoBuilder;
+import eps.platform.infraestructure.dto.nmon.CpuInfoDto;
+import eps.platform.infraestructure.dto.nmon.CpuInfoDto.CpuInfoDtoBuilder;
 
 public class CpuInfoDto_TypeAdapter extends TypeAdapter<CpuInfoDto> {
 

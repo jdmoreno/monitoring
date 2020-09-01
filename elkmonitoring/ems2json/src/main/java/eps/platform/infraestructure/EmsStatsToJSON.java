@@ -1,20 +1,24 @@
 package eps.platform.infraestructure;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import eps.platform.infraestructure.csv.CSVSerializer;
+import eps.platform.infraestructure.dto.ems.DestinationInfoDto;
+import eps.platform.infraestructure.dto.ems.ServerInfoDto;
+import eps.platform.infraestructure.dto.nmon.HeaderDto;
 import eps.platform.infraestructure.ems.stats.StatsDestination;
 import eps.platform.infraestructure.ems.stats.StatsServer;
 import eps.platform.infraestructure.ems.tibco.StatsCollection;
-import eps.platform.infraestructure.json.dto.ems.DestinationInfoDto;
-import eps.platform.infraestructure.json.dto.ems.ServerInfoDto;
-import eps.platform.infraestructure.json.dto.nmon.HeaderDto;
 import eps.platform.infraestructure.json.ser.ems.DestinationInfoSerialiser;
 import eps.platform.infraestructure.json.ser.ems.ServerInfoSerialiser;
 import eps.platform.infraestructure.json.ser.nmon.HeaderDto_TypeAdapter;
@@ -24,13 +28,18 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EmsStatsToJSON implements Runnable {
-    private final BlockingQueue<StatsCollection> queue;	
+    private final BlockingQueue<StatsCollection> queue;
+	private final boolean swCSV;
+    
     private static final Logger logJSON = LoggerFactory.getLogger("jsonLogger");
+    private static final Logger logCSVServers = LoggerFactory.getLogger("csvLoggerServers");
+    private static final Logger logCSVDestinations = LoggerFactory.getLogger("csvLoggerDestinations");
     
 	private static Gson gson = null;
     
-	public EmsStatsToJSON(BlockingQueue<StatsCollection> queue) {
+	public EmsStatsToJSON(BlockingQueue<StatsCollection> queue, boolean swCSV) {
 		this.queue = queue;		
+		this.swCSV = swCSV;
 	}
 
 	static {
@@ -55,12 +64,12 @@ public class EmsStatsToJSON implements Runnable {
 	}
 	
     private void process(StatsCollection statsCollection) throws InterruptedException {
-    	log.debug("Start logging to JSON statsCollection ...");
+    	log.debug("Start logging ...");
     	if (statsCollection != null) {
     		
     		// Server stats (queues/topics)
 	    	for (StatsServer statsServer : statsCollection.getStatsServers()) {
-	    		log.debug("Starting logging to JSON server: {} - hostname: {} - url: {}", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl() );
+	    		log.debug("Starting {} logging server - server: {} - hostname: {} - url: {}", (!swCSV)?"JSON":"CSV", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl() );
 	    		// Common header
 	    		Reference reference = InMemoryDB.get(statsServer.getHostname());		
 	    		
@@ -89,16 +98,22 @@ public class EmsStatsToJSON implements Runnable {
 	    				.build();
 	    		serverInfoDto.getStats().putAll(statsServer.getStats());
 	    		
-    			try {
-    				logJSON.info(gson.toJson(serverInfoDto));					
+				try {
+					if (!swCSV) {
+						logJSON.info(gson.toJson(serverInfoDto));
+					} else {
+						StringBuilder sb = new StringBuilder();
+						CSVSerializer.serialize(serverInfoDto, sb);
+						logCSVServers.info(sb.toString());
+					}
 				} catch (Exception e) {
-					log.error("Exception transforming server stats to JSON - Stat info {}", serverInfoDto.toString());
-					log.error("Exception transforming server stats to JSON - Exception info {}", e.getMessage());
+					log.error("Exception logging server stats - Stat info {} - Exception info {}",
+							serverInfoDto.toString(), e.getMessage());
 				}
 	    			    
 	    		// Destination stats (queues/topics). Stats of the destinations associated with the curent server being processed
 	    		for (StatsDestination statsDestination : statsServer.getDestinations()) {
-	    			log.debug("Starting logging to JSON destination - server: {} - hostname: {} - url: {} - destination: {}", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl(), statsDestination.getName());
+	    			log.debug("Starting {} logging destination - server: {} - hostname: {} - url: {} - destination: {}", (!swCSV)?"JSON":"CSV", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl(), statsDestination.getName());
 	    			DestinationInfoDto destinationInfoDto = DestinationInfoDto.builder()
 	    					.header(header)
 	    					.serverName(statsServer.getName())
@@ -113,20 +128,25 @@ public class EmsStatsToJSON implements Runnable {
 	    			destinationInfoDto.getStatsInbound().putAll(statsDestination.getStatsInbound());
 	    			destinationInfoDto.getStatsOutbound().putAll(statsDestination.getStatsOutbound());
 	    			
-	    			try {
-		    			logJSON.info(gson.toJson(destinationInfoDto));					
+					try {
+						if (!swCSV) {
+							logJSON.info(gson.toJson(destinationInfoDto));
+						} else {
+							StringBuilder sb = new StringBuilder();
+							CSVSerializer.serialize(destinationInfoDto, sb);
+							logCSVDestinations.info(sb.toString());
+
+						}
 					} catch (Exception e) {
-						log.error("Exception transforming destination stats to JSON - Stat info {}", destinationInfoDto.toString());
-						log.error("Exception transforming destination stats to JSON - Exception info {}", e.getCause());
+						log.error("Exception logging destination stats - Stat info {} - Exception info {}",
+								destinationInfoDto.toString(), e.getCause());
 					}
-	    			
-	    			log.debug("End logging to JSON destination - server: {} - hostname: {} - url: {} - destination: {}", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl(), statsDestination.getName());
+	    			log.debug("End logging destination - server: {} - hostname: {} - url: {} - destination: {}", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl(), statsDestination.getName());
 				}
-	    		log.debug("End logging to JSON server: {} - hostname: {} - url: {}", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl() );
+	    		log.debug("End logging server - server: {} - hostname: {} - url: {}", statsServer.getName(), statsServer.getHostname(), statsServer.getUrl() );
 	    	}    	
     	}
-    	log.debug("End logging to JOSN statsCollection");
+    	log.debug("End logging");
         Thread.sleep(500);
-    }
-    
+    }    
 }

@@ -6,8 +6,8 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import eps.platform.infraestructure.json.dto.nmon.NetInfoDto;
-import eps.platform.infraestructure.json.dto.nmon.NetInfoDto.NetInfoDtoBuilder;
+import eps.platform.infraestructure.dto.nmon.NetInfoDto;
+import eps.platform.infraestructure.dto.nmon.NetInfoDto.NetInfoDtoBuilder;
 
 public class NetInfoDto_TypeAdapter extends TypeAdapter<NetInfoDto> {
 

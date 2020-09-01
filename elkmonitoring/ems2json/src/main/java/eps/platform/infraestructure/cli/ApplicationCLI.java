@@ -25,28 +25,32 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j 
 public class ApplicationCLI {
 	
-	private static final String HELP_OPTION = "help";
+	private static final String HELP_OPTION_LONG = "help";
+	private static final String HELP_OPTION_SHORT = "h";
 
-	protected static final String SEVERS_FILE_PATH_OPTION_LONG = "servers";
-	protected static final String SEVERS_FILE_OPTION_SHORT = "s";
+	private static final String SEVERS_FILE_PATH_OPTION_LONG = "servers";
+	private static final String SEVERS_FILE_OPTION_SHORT = "s";
 	
 	private static final String INTERVAL_OPTION_LONG = "interval";
 	private static final String INTERVAL_OPTION_SHORT = "f";
 	
-	protected static final String DEBUG_OPTION_LONG = "debug";
-	public static final String DEBUG_OPTION_SHORT = "d";
+//	private static final String DEBUG_OPTION_LONG = "debug";
+//	private static final String DEBUG_OPTION_SHORT = "d";
 	
-	protected static final String VERSION_OPTION_LONG = "version";
-	public static final String VERSION_OPTION_SHORT = "v";
+	private static final String VERSION_OPTION_LONG = "version";
+	private static final String VERSION_OPTION_SHORT = "v";
 
-	protected static final String CHECK_OPTION_LONG = "check";
-	public static final String CHECK_OPTION_SHORT = "ch";
+	private static final String CHECK_OPTION_LONG = "check";
+	private static final String CHECK_OPTION_SHORT = "ch";
 	
-	protected static final String REFERENCE_OPTION_LONG = "reference";
-	protected static final String REFERENCE_OPTION_SHORT = "r";
+	private static final String REFERENCE_OPTION_LONG = "reference";
+	private static final String REFERENCE_OPTION_SHORT = "r";
+
+	private static final String CSV_OPTION_SHORT = "csv";
 	
 	@Getter private boolean swHelp = false;
 	@Getter private boolean swDebug = false;
+	@Getter private boolean swCSV = false;
 	
 	@Getter private Path serversFilePath = null;
 	@Getter private Path outputPath = null;
@@ -59,9 +63,10 @@ public class ApplicationCLI {
 	 */	
 	private static Options generateOptions() {
 
-	   final Option helpOption = Option.builder(HELP_OPTION)
+	   final Option helpOption = Option.builder(HELP_OPTION_SHORT)
 		      .required(false)
-		      .hasArg(false)	      
+		      .hasArg(false)
+		      .longOpt(HELP_OPTION_LONG)
 		      .desc("Help.")
 		      .valueSeparator()
 		      .build();
@@ -105,6 +110,13 @@ public class ApplicationCLI {
 			      .desc("Only check the arguments. Does not process the command. Optional")
 			      .valueSeparator()
 			      .build();
+
+	   final Option csvOption = Option.builder(CSV_OPTION_SHORT)
+			      .required(false)
+			      .hasArg(false)	      
+			      .desc("Generate CSV output instead of JSON. Optional")
+			      .valueSeparator()
+			      .build();
 	   
 	   final Options options = new Options();
 	   
@@ -114,6 +126,7 @@ public class ApplicationCLI {
 	   options.addOption(intervalOption);
 	   options.addOption(versionOption);
 	   options.addOption(checkOption);
+	   options.addOption(csvOption);
 	   
 	   return options;
 	}	
@@ -181,11 +194,17 @@ public class ApplicationCLI {
         	return false;
         }
         
-// Process help option        
-        if (commandLine.hasOption(ApplicationCLI.HELP_OPTION)) {
-        	swHelp = (commandLine.hasOption(ApplicationCLI.HELP_OPTION));
+// Process help option
+        swHelp = (commandLine.hasOption(ApplicationCLI.HELP_OPTION_SHORT));
+        if (swHelp) {
         	log.info("Help argument");
         	return true;
+        }
+        
+// Process CSV option
+        swCSV = (commandLine.hasOption(ApplicationCLI.CSV_OPTION_SHORT));
+        if (swCSV) {
+        	log.info("CSV argument");
         }
         
 // Additional option checks

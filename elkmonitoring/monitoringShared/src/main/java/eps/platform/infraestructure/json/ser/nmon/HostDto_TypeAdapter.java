@@ -7,8 +7,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import eps.platform.infraestructure.common.Constants;
-import eps.platform.infraestructure.json.dto.nmon.HostDto;
-import eps.platform.infraestructure.json.dto.nmon.HostDto.HostDtoBuilder;
+import eps.platform.infraestructure.dto.nmon.HostDto;
+import eps.platform.infraestructure.dto.nmon.HostDto.HostDtoBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 /**

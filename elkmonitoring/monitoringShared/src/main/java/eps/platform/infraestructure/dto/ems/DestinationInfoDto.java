@@ -1,11 +1,11 @@
-package eps.platform.infraestructure.json.dto.ems;
+package eps.platform.infraestructure.dto.ems;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.annotations.Expose;
 
-import eps.platform.infraestructure.json.dto.nmon.HeaderDto;
+import eps.platform.infraestructure.dto.nmon.HeaderDto;
 import lombok.Builder;
 import lombok.Value;
 

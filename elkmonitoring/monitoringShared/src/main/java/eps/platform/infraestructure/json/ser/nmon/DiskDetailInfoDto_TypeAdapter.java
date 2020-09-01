@@ -7,8 +7,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import eps.platform.infraestructure.common.Constants;
-import eps.platform.infraestructure.json.dto.nmon.DiskDetailInfoDto;
-import eps.platform.infraestructure.json.dto.nmon.DiskDetailInfoDto.DiskDetailInfoDtoBuilder;
+import eps.platform.infraestructure.dto.nmon.DiskDetailInfoDto;
+import eps.platform.infraestructure.dto.nmon.DiskDetailInfoDto.DiskDetailInfoDtoBuilder;
 
 /**
  * GSON type adapte that flattens {@code DiskDetailInfoDto} json records

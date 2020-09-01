@@ -11,7 +11,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import eps.platform.infraestructure.common.Constants;
-import eps.platform.infraestructure.json.dto.ems.DestinationInfoDto;
+import eps.platform.infraestructure.dto.ems.DestinationInfoDto;
 
 public class DestinationInfoSerialiser implements JsonSerializer<DestinationInfoDto> { 
 	@Override

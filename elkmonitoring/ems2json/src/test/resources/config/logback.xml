@@ -40,7 +40,7 @@
 	</appender>
 
 	<appender name="jsonFile" class="ch.qos.logback.core.FileAppender">
-		<file>./output/logs/emsStats.log</file>
+		<file>./output/logs/emsStats.json</file>
 	    <encoder>
 	      <pattern>%msg%n</pattern>
 	    </encoder>
@@ -51,12 +51,44 @@
 		<appender-ref ref="jsonFile" />
 	</appender>	
 
+	<appender name="csvFileServers" class="ch.qos.logback.core.FileAppender">
+		<file>./output/logs/csv-file-server.csv</file>
+	    <encoder>
+	      <pattern>%msg%n</pattern>
+	    </encoder>
+	</appender>
+
+	<appender name="asyncCsvFileServers"
+		class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="csvFileServers" />
+	</appender>	
+
+	<appender name="csvFileDestinations" class="ch.qos.logback.core.FileAppender">
+		<file>./output/logs/csv-file-destinations.csv</file>
+	    <encoder>
+	      <pattern>%msg%n</pattern>
+	    </encoder>
+	</appender>
+
+	<appender name="asyncCsvFileDestinations"
+		class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="csvFileDestinations" />
+	</appender>	
+
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
 	</root>
 
 	<logger name="jsonLogger" level="INFO" additivity="false">
 	    <appender-ref ref="asyncJsonFile" />
+	</logger>
+	
+	<logger name="csvLoggerServers" level="INFO" additivity="false">
+	    <appender-ref ref="asyncCsvFileServers" />
+	</logger>
+	
+	<logger name="csvLoggerDestinations" level="INFO" additivity="false">
+	    <appender-ref ref="asyncCsvFileDestinations" />
 	</logger>
 
 	<logger name="stdoutLogger" level="INFO">

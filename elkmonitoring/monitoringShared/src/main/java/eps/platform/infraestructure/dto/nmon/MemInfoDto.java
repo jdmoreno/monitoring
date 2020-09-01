@@ -1,4 +1,4 @@
-package eps.platform.infraestructure.json.dto.nmon;
+package eps.platform.infraestructure.dto.nmon;
 
 import java.util.Arrays;
 import java.util.HashMap;

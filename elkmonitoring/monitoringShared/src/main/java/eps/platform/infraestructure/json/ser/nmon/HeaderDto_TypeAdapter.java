@@ -6,8 +6,8 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import eps.platform.infraestructure.json.dto.nmon.HeaderDto;
-import eps.platform.infraestructure.json.dto.nmon.HeaderDto.HeaderDtoBuilder;
+import eps.platform.infraestructure.dto.nmon.HeaderDto;
+import eps.platform.infraestructure.dto.nmon.HeaderDto.HeaderDtoBuilder;
 
 public class HeaderDto_TypeAdapter extends TypeAdapter<HeaderDto> {
 

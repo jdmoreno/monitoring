@@ -10,8 +10,8 @@
     </parent>
 
 	<artifactId>monitoringShared</artifactId>
-	<version>0.0.8-SNAPSHOT</version>    
 	<packaging>jar</packaging>
+	<version>${monitoringShared.version}</version>
 
 	<properties>
 	</properties>

@@ -9,10 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import eps.platform.infraestructure.json.dto.nmon.DiskDetailInfoDto;
-import eps.platform.infraestructure.json.dto.nmon.HostDto;
-import eps.platform.infraestructure.json.dto.nmon.NetDetailInfoDto;
-import eps.platform.infraestructure.json.dto.nmon.TopDetailInfoDto;
+import eps.platform.infraestructure.dto.nmon.DiskDetailInfoDto;
+import eps.platform.infraestructure.dto.nmon.HostDto;
+import eps.platform.infraestructure.dto.nmon.NetDetailInfoDto;
+import eps.platform.infraestructure.dto.nmon.TopDetailInfoDto;
 import eps.platform.infraestructure.json.ser.nmon.DiskDetailInfoDto_TypeAdapter;
 import eps.platform.infraestructure.json.ser.nmon.HostDto_TypeAdapter;
 import eps.platform.infraestructure.json.ser.nmon.NetDetailInfoDto_TypeAdapter;

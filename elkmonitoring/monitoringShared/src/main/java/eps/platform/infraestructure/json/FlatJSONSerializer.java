@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import eps.platform.infraestructure.json.dto.nmon.HostDto;
+import eps.platform.infraestructure.dto.nmon.HostDto;
 
 public class FlatJSONSerializer implements JsonSerializer<HostDto> {
 	@Override

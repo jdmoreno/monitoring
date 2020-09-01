@@ -123,5 +123,4 @@ public class EmsLoggerConstants {
 		System.arraycopy(second, 0, result, first.length, second.length);
 		return result;
 	}
-
 }
