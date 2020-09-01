@@ -18,12 +18,4 @@ public class Queue {
 	@SerializedName("type")
 	@Expose	
 	private String type;
-	
-//	@SerializedName("logDir")
-//	@Expose		
-//	private String logDir;
-//	
-//	@SerializedName("logFile")
-//	@Expose		
-//	private String logFile;
 }

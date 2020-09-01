@@ -16,7 +16,6 @@ public class Server {
 	@SerializedName("alias")
 	@Expose			
 	private String alias;
-	
 
 	@SerializedName("url")
 	@Expose				

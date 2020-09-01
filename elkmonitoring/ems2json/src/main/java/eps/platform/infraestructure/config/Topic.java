@@ -14,12 +14,4 @@ public class Topic {
 	@SerializedName("pattern")
 	@Expose		
 	private String pattern;
-	
-//	@SerializedName("logDir")
-//	@Expose		
-//	private String logDir;
-//	
-//	@SerializedName("logFile")
-//	@Expose		
-//	private String logFile;
 }

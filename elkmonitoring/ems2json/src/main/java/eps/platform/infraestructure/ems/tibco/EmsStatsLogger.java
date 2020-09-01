@@ -47,16 +47,12 @@ public class EmsStatsLogger implements Runnable {
 
 		long start = 0;
 		long end = 0;
-//		long pollStart = 0;
-//		long pollEnd = 0;
 
 		StatsCollection statsCollection = new StatsCollection();
 		
 		Map<String, EmsServer> servers = EmsConfiguration.getServers();
 		start = System.nanoTime();
 		
-//		pollStart = System.nanoTime();
-
 		for (Entry<String, EmsServer> entry : servers.entrySet()) {
 			EmsServer con = entry.getValue();
 			if (con.getAdminConn() != null) {
@@ -102,7 +98,6 @@ public class EmsStatsLogger implements Runnable {
 				}
 			}
 		}
-//		pollEnd = System.nanoTime();
 		
 		try {
 			queue.put(statsCollection);

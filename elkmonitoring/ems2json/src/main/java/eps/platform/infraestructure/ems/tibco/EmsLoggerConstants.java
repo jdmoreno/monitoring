@@ -31,7 +31,6 @@ public class EmsLoggerConstants {
 	}
 	
 	public static void getStatsMethodNames(List<String> v, Class<? extends Object> c, String prefix) {
-
 		try {
 			Method[] methods = c.getMethods();
 			for (int i = 0; i < methods.length; i++) {

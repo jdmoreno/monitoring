@@ -18,11 +18,7 @@ public class ConnectThread implements Runnable {
 
 	@Override
 	public void run() {
-//		long start = 0;
-//		long end = 0;
-
 		Map<String, EmsServer> servers = EmsConfiguration.getServers();
-//		start = System.nanoTime();
 		
 		for (Entry<String, EmsServer> entry : servers.entrySet()) {
 			EmsServer con = entry.getValue();
@@ -92,7 +88,6 @@ public class ConnectThread implements Runnable {
 										log.debug("Connected to active server " + con.getAlias() + " at " + u);
 										break;
 									}
-	
 								}
 							}
 						}
@@ -121,7 +116,5 @@ public class ConnectThread implements Runnable {
 				log.error("Connect failed to Server " + con.getAlias() + " " + th.toString());
 			}
 		}
-	
-//		end = System.nanoTime();
 	}
 }

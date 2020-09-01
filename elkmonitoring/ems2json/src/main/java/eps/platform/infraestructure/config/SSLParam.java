@@ -14,7 +14,6 @@ public class SSLParam {
 	@Expose			
 	private String name;
 	
-
 	@SerializedName("type")
 	@Expose				
 	private String type;
