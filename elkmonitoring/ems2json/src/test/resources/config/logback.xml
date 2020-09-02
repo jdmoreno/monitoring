@@ -63,18 +63,30 @@
 		<appender-ref ref="csvFileServers" />
 	</appender>	
 
-	<appender name="csvFileDestinations" class="ch.qos.logback.core.FileAppender">
-		<file>./output/logs/csv-file-destinations.csv</file>
+	<appender name="csvFileQueues" class="ch.qos.logback.core.FileAppender">
+		<file>./output/logs/csv-file-queues.csv</file>
 	    <encoder>
 	      <pattern>%msg%n</pattern>
 	    </encoder>
 	</appender>
 
-	<appender name="asyncCsvFileDestinations"
+	<appender name="asyncCsvFileQueues"
 		class="ch.qos.logback.classic.AsyncAppender">
-		<appender-ref ref="csvFileDestinations" />
+		<appender-ref ref="csvFileQueues" />
 	</appender>	
 
+	<appender name="csvFileTopics" class="ch.qos.logback.core.FileAppender">
+		<file>./output/logs/csv-file-topics.csv</file>
+	    <encoder>
+	      <pattern>%msg%n</pattern>
+	    </encoder>
+	</appender>
+
+	<appender name="asyncCsvFileTopics"
+		class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="csvFileTopics" />
+	</appender>	
+	
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
 	</root>
@@ -87,10 +99,14 @@
 	    <appender-ref ref="asyncCsvFileServers" />
 	</logger>
 	
-	<logger name="csvLoggerDestinations" level="INFO" additivity="false">
-	    <appender-ref ref="asyncCsvFileDestinations" />
+	<logger name="csvLoggerQueues" level="INFO" additivity="false">
+	    <appender-ref ref="asyncCsvFileQueues" />
 	</logger>
 
+	<logger name="csvLoggerTopics" level="INFO" additivity="false">
+	    <appender-ref ref="asyncCsvFileTopics" />
+	</logger>
+	
 	<logger name="stdoutLogger" level="INFO">
 	    <appender-ref ref="STDOUT" />
 	</logger>

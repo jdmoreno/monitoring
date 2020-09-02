@@ -1,11 +1,11 @@
 package eps.platform.infraestructure.ems.tibco;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import com.tibco.tibjms.admin.DestinationInfo;
 
@@ -30,60 +30,37 @@ public class EmsLoggerConstants {
 		return source.replaceAll("\\s+", "");
 	}
 	
-	public static void getStatsMethodNames(List<String> v, Class<? extends Object> c, String prefix) {
-		try {
-			Method[] methods = c.getMethods();
-			for (int i = 0; i < methods.length; i++) {
-				String methodName = methods[i].getName();
-				if (matchStatsMethod(methods[i], methodName)) {
-					String displayName = getStatsDisplayName(methodName);
-					if (prefix != null && prefix.length() > 0) {
-						displayName = prefix + Character.toUpperCase(displayName.charAt(0)) + displayName.substring(1);
-					}
-					v.add(displayName);
-				}
-			}
-		} catch (Exception ex) {
-			log.error(ex.getClass() + ": " + ex.getMessage());
-		}
-	}
-	
-	public static Map<String, Object> getStatsMethodValues(Object obj, String prefix) {
-		Class<? extends Object> c = obj.getClass();
-		Map<String, Object> stats = new HashMap<>(); 
-
+	public static Map<StatName, Method> getStatsMethods(Class<? extends Object> c, String prefix) {
+		Map<StatName, Method> statsMethods = new TreeMap<>();
+		
 		Method[] methods = c.getMethods();
-		for (int i = 0; i < methods.length; i++) {
-			String methodName = methods[i].getName();
-			if (matchStatsMethod(methods[i], methodName)) {
-				try {
-					String displayName = getStatsDisplayName(methodName);
-					if (prefix != null && prefix.length() > 0) {
-						displayName = prefix + Character.toUpperCase(displayName.charAt(0)) + displayName.substring(1);
-					}
-					Object ret = methods[i].invoke(obj, (java.lang.Object[]) null);
-					stats.put(displayName, ret);
-				} catch (Exception ex) {
-					log.error(ex.getClass() + ": " + ex.getMessage());
-				}
-			}
+		for (Method method : methods) {
+			if (matchStatsMethod(method)) {
+				StatName statName = StatName.getStatsDisplayName(method, prefix);
+				statsMethods.put(statName, method);
+			}				
 		}
-		return stats;
+		return statsMethods;
 	}
 	
-	// Returns stats display name from ServerInfo method name
-	public static String getStatsDisplayName(String methodName) {
-
-		String displayName;
-		if (Character.isLowerCase(methodName.charAt(4)))
-			displayName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);
-		else
-			displayName = methodName.substring(3);
-		return displayName;
+	public static Map<StatName, Object> getStatsValues(Map<StatName, Method> statsMethods, Object obj) {
+		Map<StatName, Object> statsValues = new TreeMap<>(); 
+		
+		for (Entry<StatName, Method> statsMethod : statsMethods.entrySet()) {
+			Object ret = null;
+			try {
+				ret = statsMethod.getValue().invoke(obj, (java.lang.Object[]) null);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				log.error(e.getClass() + ": " + e.getMessage());
+			}
+			statsValues.put(statsMethod.getKey(), ret);
+		}
+		return statsValues;
 	}
 	
 	// Returns if ServerInfo method returns a stats value that should be logged.
-	private static boolean matchStatsMethod(Method method, String methodName) {
+	private static boolean matchStatsMethod(Method method) {		
+		String methodName = method.getName();
 		if (methodName.startsWith("get")) {
 			Class<?>[] parameterTypes = method.getParameterTypes();
 			if (parameterTypes.length > 0) {
@@ -110,17 +87,5 @@ public class EmsLoggerConstants {
 			}
 		}
 		return false;
-	}
-	
-	public static <T> T[] concatArrays(T[] first, T[] second) {
-		if (first == null)
-			return second;
-	
-		if (second == null)
-			return first;
-	
-		T[] result = Arrays.copyOf(first, first.length + second.length);
-		System.arraycopy(second, 0, result, first.length, second.length);
-		return result;
 	}
 }

@@ -24,9 +24,10 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import eps.platform.infraestructure.cli.ApplicationCLI;
 import eps.platform.infraestructure.common.Utils;
 import eps.platform.infraestructure.config.YamlConfig;
+import eps.platform.infraestructure.csv.CSVSerializer;
 import eps.platform.infraestructure.ems.tibco.ConnectThread;
 import eps.platform.infraestructure.ems.tibco.EmsConfiguration;
-import eps.platform.infraestructure.ems.tibco.EmsStats;
+import eps.platform.infraestructure.ems.tibco.EmsStatNames;
 import eps.platform.infraestructure.ems.tibco.EmsStatsLogger;
 import eps.platform.infraestructure.ems.tibco.StatsCollection;
 import eps.platform.infraestructure.exception.EPSMonioringException;
@@ -92,23 +93,31 @@ public class EMS2JSON {
 		}
 		
 		// Convert yaml structure to List
-		EmsConfiguration.configure(yamlConfig.getServers());
+		EmsConfiguration emsConfiguration = EmsConfiguration.configure(yamlConfig.getServers());
 		
-		//
-		EmsStats.init();
+		// Get stats names
+		EmsStatNames emsStatNames = EmsStatNames.getStatsMethodNames();
 		
-		// Start schedulled task to keep connections open
-		ConnectThread connectThread = new ConnectThread();
+		// Log configuration
+		log.info("List of monitored servers={}", CSVSerializer.iterableToCSV(emsConfiguration.getServers().values()));		
+		log.info("List of monitored servers metrics={}", CSVSerializer.iterableToCSV(emsStatNames.getServerStatsNames().keySet()));
+		log.info("List of monitored queue metrics={}", CSVSerializer.iterableToCSV(emsStatNames.getQueueStatsNames().keySet()));
+		log.info("List of monitored topic metrics={}", CSVSerializer.iterableToCSV(emsStatNames.getTopicStatsNames().keySet()));
+		log.info("List of monitored inbound metrics={}", CSVSerializer.iterableToCSV(emsStatNames.getDestinationInboudStatsNames().keySet()));
+		log.info("List of monitored outboud metrics={}", CSVSerializer.iterableToCSV(emsStatNames.getDestinationOutboundStatsNames().keySet()));
+		
+		// Start scheduled task to keep connections open
+		ConnectThread connectThread = new ConnectThread(emsConfiguration);
 		ScheduledExecutorService executorConnectThread = Executors.newSingleThreadScheduledExecutor();
 		ScheduledFuture<?> resultConnectThread = executorConnectThread.scheduleAtFixedRate(connectThread, 5, 5, TimeUnit.SECONDS);
 		
-		// Start schedulled task to keep query stats
-		EmsStatsLogger emsStatsLogger = new EmsStatsLogger(queue);
+		// Start scheduled task to keep query stats
+		EmsStatsLogger emsStatsLogger = new EmsStatsLogger(queue, emsStatNames, emsConfiguration);
 		ScheduledExecutorService executorEmsStatsLogger = Executors.newSingleThreadScheduledExecutor();
 		ScheduledFuture<?> resultEmsStatsLogger = executorEmsStatsLogger.scheduleWithFixedDelay(emsStatsLogger, 5, applicationCLI.getInterval(), TimeUnit.SECONDS);		
 		
-		// Start schedulled task to export stats to JSON
-		EmsStatsToJSON emsStatsToJSON = new EmsStatsToJSON(queue, applicationCLI.isSwCSV());
+		// Start scheduled task to export stats
+		EmsStatsToJSON emsStatsToJSON = new EmsStatsToJSON(queue, emsStatNames, applicationCLI.isSwCSV());
 		ExecutorService executorEmsStatsToJSON = Executors.newSingleThreadScheduledExecutor();
 		Future<?> resultEmsStatsToJSON = executorEmsStatsToJSON.submit(emsStatsToJSON);		
 		

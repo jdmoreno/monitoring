@@ -37,9 +37,13 @@ public class EmsStatsLogger implements Runnable {
 	// Add any additional get methods here that you dont wish to be logged.
 
     private final BlockingQueue<StatsCollection> queue;
+    private final EmsStatNames emsStats;
+    private final EmsConfiguration emsConfiguration;
 	
-	public EmsStatsLogger(BlockingQueue<StatsCollection> queue) {
+	public EmsStatsLogger(BlockingQueue<StatsCollection> queue, EmsStatNames emsStats, EmsConfiguration emsConfiguration) {
 		this.queue = queue;		
+		this.emsStats = emsStats;
+		this.emsConfiguration = emsConfiguration;
 	}
 	
 	@Override	
@@ -50,32 +54,32 @@ public class EmsStatsLogger implements Runnable {
 
 		StatsCollection statsCollection = new StatsCollection();
 		
-		Map<String, EmsServer> servers = EmsConfiguration.getServers();
+		Map<String, EmsServer> servers = emsConfiguration.getServers();
 		start = System.nanoTime();
 		
 		for (Entry<String, EmsServer> entry : servers.entrySet()) {
-			EmsServer con = entry.getValue();
-			if (con.getAdminConn() != null) {
+			EmsServer emsServer = entry.getValue();
+			if (emsServer.getAdminConn() != null) {
 				long respTime = 0;
 
 				try {
 					Date timestamp = null;
 					try {
 						start = System.nanoTime();
-						con.setServerInfo(con.getAdminConn().getInfo());
+						emsServer.setServerInfo(emsServer.getAdminConn().getInfo());
 
 						end = System.nanoTime();
 						timestamp = new Date();
 						respTime = (end - start) / 1000000;
 					} catch (TibjmsAdminSecurityException se) {
-						con.setServerInfo(null);
+						emsServer.setServerInfo(null);
 					}
 
-					if (con.getServerInfo() != null
-							&& (con.getServerInfo().getStateObj().get() & SERVER_STATE_ACTIVE) != 0) {
-						statsCollection.getStatsServers().add(con.getStats(timestamp, respTime));
+					if (emsServer.getServerInfo() != null
+							&& (emsServer.getServerInfo().getStateObj().get() & SERVER_STATE_ACTIVE) != 0) {
+						statsCollection.getStatsServers().add(emsServer.getStatsValues(emsStats, timestamp, respTime));
 					} else {
-						log.warn("Server " + con.getAlias()
+						log.warn("Server " + emsServer.getAlias()
 								+ " in standby mode, logging will not start until server is active");
 					}
 				} catch (TibjmsAdminException ex) {
@@ -85,16 +89,16 @@ public class EmsStatsLogger implements Runnable {
 							respTime = (end - start) / 1000000;
 						}
 						// Clean up later..
-						con.setStaleConn(con.getAdminConn());
-						con.close();
-						serverDisconnected(con, " timeout after " + respTime + "(ms) " + ex.toString());
+						emsServer.setStaleConn(emsServer.getAdminConn());
+						emsServer.close();
+						serverDisconnected(emsServer, " timeout after " + respTime + "(ms) " + ex.toString());
 					} else {
-						con.close();
-						serverDisconnected(con, ex.toString());
+						emsServer.close();
+						serverDisconnected(emsServer, ex.toString());
 					}
 				} catch (Exception ex1) {
-					con.close();
-					serverDisconnected(con, ex1.toString());
+					emsServer.close();
+					serverDisconnected(emsServer, ex1.toString());
 				}
 			}
 		}

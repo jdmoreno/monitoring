@@ -10,15 +10,16 @@ import com.tibco.tibjms.admin.TibjmsAdminException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ConnectThread implements Runnable {
+public class ConnectThread implements Runnable {	
+	private EmsConfiguration emsConfiguration = null;
 	
-	public ConnectThread() {	
-// Default constructor		
+	public ConnectThread(EmsConfiguration emsConfiguration) {	
+		this.emsConfiguration = emsConfiguration; 
 	}
 
 	@Override
 	public void run() {
-		Map<String, EmsServer> servers = EmsConfiguration.getServers();
+		Map<String, EmsServer> servers = emsConfiguration.getServers();
 		
 		for (Entry<String, EmsServer> entry : servers.entrySet()) {
 			EmsServer con = entry.getValue();

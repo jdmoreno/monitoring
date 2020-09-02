@@ -30,6 +30,4 @@ public class DestinationInfoDto {
 	@Expose private final Map<String, Object> stats  = new HashMap<>();
 	@Expose private final Map<String, Object> statsInbound = new HashMap<>();
 	@Expose private final Map<String, Object> statsOutbound = new HashMap<>();
-
-
 }

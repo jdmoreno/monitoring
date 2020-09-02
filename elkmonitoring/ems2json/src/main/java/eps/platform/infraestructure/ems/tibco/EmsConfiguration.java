@@ -10,18 +10,20 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EmsConfiguration {
-	@Getter private static final Map<String, EmsServer> servers = new HashMap<>();
+	@Getter private final Map<String, EmsServer> servers = new HashMap<>();
 	
 	private EmsConfiguration() {
 	}
 	
-	public static void configure(List<Server> yamlServers) {
+	public static EmsConfiguration configure(List<Server> yamlServers) {
+		EmsConfiguration emsConfiguration = new EmsConfiguration(); 
 		for (Server yamlServer : yamlServers) {
-			addServer(yamlServer);
+			emsConfiguration.addServer(yamlServer);
 		}
+		return emsConfiguration;
 	}
 	
-	private static void addServer(Server yamlServer) {
+	private void addServer(Server yamlServer) {
 		
 		if (!servers.containsKey(yamlServer.getAlias())) {
 			if (yamlServer.getUrl().startsWith("ssl") && (yamlServer.getSslParams() == null || yamlServer.getSslParams().size() == 0)) {
@@ -30,9 +32,11 @@ public class EmsConfiguration {
 				log.warn("SSL Parameters found but ssl URL not specfied for Server with alias " + yamlServer.getAlias());
 			}
 
-			servers.put(yamlServer.getAlias(), new EmsServer(yamlServer));
+			EmsServer emsServer = new EmsServer(yamlServer);
+//			emsServer.setDestinations();
+			servers.put(yamlServer.getAlias(), emsServer);
 			log.debug("Added " + yamlServer.getAlias() + " " + yamlServer.getUrl() + " " + yamlServer.getUser() + " " + " queue monitors " + (yamlServer.getQueues() == null ? 0 : yamlServer.getQueues().size()) + " topic monitors "
-					+ (yamlServer.getTopics() == null ? 0 : yamlServer.getTopics().size()));
+					+ (yamlServer.getTopics() == null ? 0 : yamlServer.getTopics().size()));			
 		} else {
 			log.warn("EMS Server with alias " + yamlServer.getAlias() + " already exists, ignoring server at: " + yamlServer.getUrl());
 		}

@@ -9,6 +9,7 @@ import java.util.Map;
 import com.google.gson.annotations.Expose;
 import com.tibco.tibjms.admin.ServerInfo;
 
+import eps.platform.infraestructure.ems.tibco.StatName;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -20,8 +21,9 @@ public class StatsServer {
 	@Expose private final String hostname;
 	@Expose private final String url;
 		
-	@Expose private final Map<String, Object> stats = new HashMap<>();
-	@Expose private final List<StatsDestination> destinations = new ArrayList<>();
+	@Expose private final Map<StatName, Object> stats = new HashMap<>();
+	@Expose private final List<DestinationStats> queuesStats = new ArrayList<>();
+	@Expose private final List<DestinationStats> topicsStats = new ArrayList<>();
 		
 	public StatsServer(ServerInfo serverInfo) {
 		this.timestamp = LocalDateTime.now();
