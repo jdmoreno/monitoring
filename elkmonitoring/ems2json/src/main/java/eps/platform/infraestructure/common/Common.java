@@ -1,4 +1,4 @@
-package eps.platform.infraestructure.ems.tibco;
+package eps.platform.infraestructure.common;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,12 +9,13 @@ import java.util.TreeMap;
 
 import com.tibco.tibjms.admin.DestinationInfo;
 
+import eps.platform.infraestructure.ems.stats.StatName;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class EmsLoggerConstants {
+public class Common {
 	
-	private EmsLoggerConstants() {
+	private Common() {
 	}
 
 	public static final String[] methodExclusionList = { "getRouteRecoverCount", "getLargeDestCount" };
@@ -26,6 +27,20 @@ public class EmsLoggerConstants {
 	public static final int destCursorSize = 100;
 	public static final int maxDestinations = 500;
 
+// CSV Headers
+	public static final String CSV_LIT_RECORD_TYPE = "Record Type";	
+	public static final String CSV_LIT_SOURCE = "Source";
+	public static final String CSV_LIT_SECTION = "Section";
+	public static final String CSV_LIT_TIMESTAMP = "Timestamp";
+	public static final String CSV_LIT_HOSTNAME = "Hostname";
+	public static final String CSV_LIT_OS = "Os";
+	public static final String CSV_LIT_DATACENTRE = "Datacentre";
+	public static final String CSV_LIT_ENVIRONMENT = "Environment";
+	public static final String CSV_LIT_SERVER_FUNCTION = "Server Function";
+	public static final String CSV_LIT_EMS_SERVER_NAME = "EMS Server Name";
+	public static final String CSV_LIT_EMS_HOSTNAME = "EMS Hostname";
+	public static final String CSV_LIT_URL = "URL";
+	
 	public static String stripSpaces(String source) {
 		return source.replaceAll("\\s+", "");
 	}

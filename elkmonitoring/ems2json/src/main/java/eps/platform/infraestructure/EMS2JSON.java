@@ -22,14 +22,15 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import eps.platform.infraestructure.cli.ApplicationCLI;
+import eps.platform.infraestructure.common.CSVSerializer;
+import eps.platform.infraestructure.common.EmsStatNames;
 import eps.platform.infraestructure.common.Utils;
+import eps.platform.infraestructure.config.EmsConfiguration;
 import eps.platform.infraestructure.config.YamlConfig;
-import eps.platform.infraestructure.csv.CSVSerializer;
+import eps.platform.infraestructure.ems.stats.ListServersStats;
 import eps.platform.infraestructure.ems.tibco.ConnectThread;
-import eps.platform.infraestructure.ems.tibco.EmsConfiguration;
-import eps.platform.infraestructure.ems.tibco.EmsStatNames;
-import eps.platform.infraestructure.ems.tibco.EmsStatsLogger;
-import eps.platform.infraestructure.ems.tibco.StatsCollection;
+import eps.platform.infraestructure.ems.tibco.CollectorThread;
+import eps.platform.infraestructure.ems.tibco.LoggerThread;
 import eps.platform.infraestructure.exception.EPSMonioringException;
 import eps.platform.infraestructure.exception.ErrorCode;
 import eps.platform.infraestructure.nmon.csv.InMemoryDB;
@@ -53,7 +54,7 @@ public class EMS2JSON {
 	// FILE NAME: HOSTNAME_YYMMDD_00000.mon
 	public static void main(String[] args) {
 
-		BlockingQueue<StatsCollection> queue = new LinkedBlockingQueue<>();
+		BlockingQueue<ListServersStats> queue = new LinkedBlockingQueue<>();
 		
 		Instant start = Instant.now();
 		int filesProcessed = 0;
@@ -112,12 +113,12 @@ public class EMS2JSON {
 		ScheduledFuture<?> resultConnectThread = executorConnectThread.scheduleAtFixedRate(connectThread, 5, 5, TimeUnit.SECONDS);
 		
 		// Start scheduled task to keep query stats
-		EmsStatsLogger emsStatsLogger = new EmsStatsLogger(queue, emsStatNames, emsConfiguration);
+		CollectorThread emsStatsLogger = new CollectorThread(queue, emsStatNames, emsConfiguration);
 		ScheduledExecutorService executorEmsStatsLogger = Executors.newSingleThreadScheduledExecutor();
 		ScheduledFuture<?> resultEmsStatsLogger = executorEmsStatsLogger.scheduleWithFixedDelay(emsStatsLogger, 5, applicationCLI.getInterval(), TimeUnit.SECONDS);		
 		
 		// Start scheduled task to export stats
-		EmsStatsToJSON emsStatsToJSON = new EmsStatsToJSON(queue, emsStatNames, applicationCLI.isSwCSV());
+		LoggerThread emsStatsToJSON = new LoggerThread(queue, emsStatNames, applicationCLI.isSwCSV());
 		ExecutorService executorEmsStatsToJSON = Executors.newSingleThreadScheduledExecutor();
 		Future<?> resultEmsStatsToJSON = executorEmsStatsToJSON.submit(emsStatsToJSON);		
 		

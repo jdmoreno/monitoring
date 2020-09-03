@@ -1,10 +1,9 @@
-package eps.platform.infraestructure.ems.tibco;
+package eps.platform.infraestructure.config;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import eps.platform.infraestructure.config.Server;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

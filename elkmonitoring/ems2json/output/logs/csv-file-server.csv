@@ -1,0 +1,8 @@
+Record Type,Source,Section,Timestamp,Hostname,Os,Datacentre,Environment,Server Function,EMS Server Name,EMS Hostname,URL,adminConnectionCount,asyncDBSize,clientConnectionCount,connectionCount,consumerCount,diskReadOperationsRate,diskReadRate,diskWriteOperationsRate,diskWriteRate,durableCount,inboundBytesRate,inboundMessageCount,inboundMessageRate,msgMem,msgMemPooled,outboundBytesRate,outboundMessageCount,outboundMessageRate,pendingMessageCount,pendingMessageSize,producerCount,queueCount,sessionCount,syncDBSize,topicCount
+EMS_STATS_SERVER,,,2020-09-03T17:46:14.3921891,L1023494,,L1023494,,,EMS-SERVER,L1023494,tcp://localhost:7222,1,4608,0,1,1,0,0,0,0,0,0,457,0,9613,53248,0,456,0,0,0,1,7,1,19456,0
+EMS_STATS_SERVER,,,2020-09-03T17:46:19.4050826,L1023494,,L1023494,,,EMS-SERVER,L1023494,tcp://localhost:7222,1,4608,0,1,1,0,0,0,0,0,0,466,0,9614,53248,0,465,0,0,0,1,7,1,19456,0
+EMS_STATS_SERVER,,,2020-09-03T17:46:24.4143656,L1023494,,L1023494,,,EMS-SERVER,L1023494,tcp://localhost:7222,1,4608,0,1,1,0,0,0,0,0,0,475,0,9614,53248,0,474,0,0,0,1,7,1,19456,0
+EMS_STATS_SERVER,,,2020-09-03T17:46:29.4238689,L1023494,,L1023494,,,EMS-SERVER,L1023494,tcp://localhost:7222,1,4608,0,1,1,0,0,0,0,0,0,484,0,9614,53248,0,483,0,0,0,1,7,1,19456,0
+EMS_STATS_SERVER,,,2020-09-03T17:46:34.4371954,L1023494,,L1023494,,,EMS-SERVER,L1023494,tcp://localhost:7222,1,4608,0,1,1,0,0,0,0,0,0,493,0,9614,53248,0,492,0,0,0,1,7,1,19456,0
+EMS_STATS_SERVER,,,2020-09-03T17:46:39.4458142,L1023494,,L1023494,,,EMS-SERVER,L1023494,tcp://localhost:7222,1,4608,0,1,1,0,0,0,0,0,0,502,0,9614,53248,0,501,0,0,0,1,7,1,19456,0
+EMS_STATS_SERVER,,,2020-09-03T17:46:44.4567729,L1023494,,L1023494,,,EMS-SERVER,L1023494,tcp://localhost:7222,1,4608,0,1,1,0,0,0,0,0,0,511,0,9614,53248,0,510,0,0,0,1,7,1,19456,0

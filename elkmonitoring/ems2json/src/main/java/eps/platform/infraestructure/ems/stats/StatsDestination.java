@@ -7,13 +7,12 @@ import com.google.gson.annotations.Expose;
 import com.tibco.tibjms.admin.DestinationInfo;
 
 import eps.platform.infraestructure.DestinationType;
-import eps.platform.infraestructure.ems.tibco.StatName;
 import lombok.Getter;
 import lombok.ToString;
 
 @ToString
 @Getter
-public class DestinationStats {
+public class StatsDestination {
 
 	@Expose private final String name;
 	@Expose private final DestinationType destinationType;
@@ -25,7 +24,7 @@ public class DestinationStats {
 	@Expose private final Map<StatName, Object> statsInbound = new HashMap<>();
 	@Expose private final Map<StatName, Object> statsOutbound = new HashMap<>();
 	
-	public DestinationStats(DestinationInfo destinationInfo, DestinationType destinationType) {
+	public StatsDestination(DestinationInfo destinationInfo, DestinationType destinationType) {
 		this.name = destinationInfo.getName();
 		this.destinationType = destinationType;
 		this.store = destinationInfo.getStore();

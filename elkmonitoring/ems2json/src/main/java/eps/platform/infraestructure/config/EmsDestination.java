@@ -1,7 +1,6 @@
-package eps.platform.infraestructure.ems.tibco;
+package eps.platform.infraestructure.config;
 
-import eps.platform.infraestructure.config.Queue;
-import eps.platform.infraestructure.config.Topic;
+import eps.platform.infraestructure.common.Common;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -9,15 +8,15 @@ import lombok.ToString;
 @Getter
 public class EmsDestination {
 	private String pattern;
-	private int permType = EmsLoggerConstants.defaultDestPermType;
+	private int permType = Common.defaultDestPermType;
 //	private List<DestinationInfo> destinationInfo = new ArrayList<>();
 	
 	public EmsDestination(Queue queue) {
-		this(queue.getPattern(), EmsLoggerConstants.defaultDestPermType);
+		this(queue.getPattern(), Common.defaultDestPermType);
 	}
 
 	public EmsDestination(Topic topic) {
-		this(topic.getPattern(), EmsLoggerConstants.defaultDestPermType);
+		this(topic.getPattern(), Common.defaultDestPermType);
 	}
 	
 	public EmsDestination(String pattern, int permType) {

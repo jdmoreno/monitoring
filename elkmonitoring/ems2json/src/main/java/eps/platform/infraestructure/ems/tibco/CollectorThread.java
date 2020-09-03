@@ -20,10 +20,14 @@ import java.util.concurrent.BlockingQueue;
 import com.tibco.tibjms.admin.TibjmsAdminException;
 import com.tibco.tibjms.admin.TibjmsAdminSecurityException;
 
+import eps.platform.infraestructure.common.EmsStatNames;
+import eps.platform.infraestructure.config.EmsConfiguration;
+import eps.platform.infraestructure.config.EmsServer;
+import eps.platform.infraestructure.ems.stats.ListServersStats;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class EmsStatsLogger implements Runnable {
+public class CollectorThread implements Runnable {
 
 	// Method properties from the EMS Admin API ServerInfo, DestinationInfo,
 	// QueueInfo, TopicInfo, StatData classes that match the following statistics
@@ -36,11 +40,11 @@ public class EmsStatsLogger implements Runnable {
 	// In addition the methods listed below are also excluded.
 	// Add any additional get methods here that you dont wish to be logged.
 
-    private final BlockingQueue<StatsCollection> queue;
+    private final BlockingQueue<ListServersStats> queue;
     private final EmsStatNames emsStats;
     private final EmsConfiguration emsConfiguration;
 	
-	public EmsStatsLogger(BlockingQueue<StatsCollection> queue, EmsStatNames emsStats, EmsConfiguration emsConfiguration) {
+	public CollectorThread(BlockingQueue<ListServersStats> queue, EmsStatNames emsStats, EmsConfiguration emsConfiguration) {
 		this.queue = queue;		
 		this.emsStats = emsStats;
 		this.emsConfiguration = emsConfiguration;
@@ -52,7 +56,7 @@ public class EmsStatsLogger implements Runnable {
 		long start = 0;
 		long end = 0;
 
-		StatsCollection statsCollection = new StatsCollection();
+		ListServersStats statsCollection = new ListServersStats();
 		
 		Map<String, EmsServer> servers = emsConfiguration.getServers();
 		start = System.nanoTime();

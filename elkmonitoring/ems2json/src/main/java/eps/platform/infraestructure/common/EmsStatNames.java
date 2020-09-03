@@ -1,4 +1,4 @@
-package eps.platform.infraestructure.ems.tibco;
+package eps.platform.infraestructure.common;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -8,7 +8,7 @@ import com.tibco.tibjms.admin.ServerInfo;
 import com.tibco.tibjms.admin.StatData;
 import com.tibco.tibjms.admin.TopicInfo;
 
-import eps.platform.infraestructure.csv.CSVSerializer;
+import eps.platform.infraestructure.ems.stats.StatName;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,23 +27,23 @@ public class EmsStatNames {
 		EmsStatNames emsStatsNames = new EmsStatNames();
 		
 		// Get Server stats names
-		emsStatsNames.serverStatsNames = EmsLoggerConstants.getStatsMethods(ServerInfo.class, null);
+		emsStatsNames.serverStatsNames = Common.getStatsMethods(ServerInfo.class, null);
 		log.debug("Added server stats names: " + CSVSerializer.iterableToCSV(emsStatsNames.serverStatsNames.keySet()));
 		
 		// Get Queue stats names
-		emsStatsNames.queueStatsNames = EmsLoggerConstants.getStatsMethods(QueueInfo.class, null);
+		emsStatsNames.queueStatsNames = Common.getStatsMethods(QueueInfo.class, null);
 		log.debug("Added queue stats names: " + CSVSerializer.iterableToCSV(emsStatsNames.queueStatsNames.keySet()));
 
 		// Get Topic stats names
-		emsStatsNames.topicStatsNames = EmsLoggerConstants.getStatsMethods(TopicInfo.class, null);
+		emsStatsNames.topicStatsNames = Common.getStatsMethods(TopicInfo.class, null);
 		log.debug("Added topics stats names: " + CSVSerializer.iterableToCSV(emsStatsNames.topicStatsNames.keySet()));
 		
 		// Get Destination Inbound stats names
-		emsStatsNames.destinationInboudStatsNames = EmsLoggerConstants.getStatsMethods(StatData.class, "inbound");
+		emsStatsNames.destinationInboudStatsNames = Common.getStatsMethods(StatData.class, "inbound");
 		log.debug("Added destination inbound stats names: " + CSVSerializer.iterableToCSV(emsStatsNames.destinationInboudStatsNames.keySet()));
 		
 		// Get Destination Outbound stats names
-		emsStatsNames.destinationOutboundStatsNames = EmsLoggerConstants.getStatsMethods(StatData.class, "outbound");
+		emsStatsNames.destinationOutboundStatsNames = Common.getStatsMethods(StatData.class, "outbound");
 		log.debug("Added destination outbound stats names: " + CSVSerializer.iterableToCSV(emsStatsNames.destinationOutboundStatsNames.keySet()));
 
 		

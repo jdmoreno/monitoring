@@ -7,6 +7,8 @@ import com.tibco.tibjms.admin.StateInfo;
 import com.tibco.tibjms.admin.TibjmsAdmin;
 import com.tibco.tibjms.admin.TibjmsAdminException;
 
+import eps.platform.infraestructure.config.EmsConfiguration;
+import eps.platform.infraestructure.config.EmsServer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

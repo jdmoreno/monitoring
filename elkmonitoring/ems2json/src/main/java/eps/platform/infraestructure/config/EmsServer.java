@@ -1,4 +1,4 @@
-package eps.platform.infraestructure.ems.tibco;
+package eps.platform.infraestructure.config;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,11 +15,10 @@ import com.tibco.tibjms.admin.TibjmsAdmin;
 import com.tibco.tibjms.admin.TibjmsAdminException;
 
 import eps.platform.infraestructure.DestinationType;
-import eps.platform.infraestructure.config.Queue;
-import eps.platform.infraestructure.config.Server;
-import eps.platform.infraestructure.config.Topic;
-import eps.platform.infraestructure.csv.CSVSerializer;
-import eps.platform.infraestructure.ems.stats.DestinationStats;
+import eps.platform.infraestructure.common.CSVSerializer;
+import eps.platform.infraestructure.common.Common;
+import eps.platform.infraestructure.common.EmsStatNames;
+import eps.platform.infraestructure.ems.stats.StatsDestination;
 import eps.platform.infraestructure.ems.stats.StatsServer;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,10 +39,6 @@ public class EmsServer {
 	@Setter private TibjmsAdmin adminConn = null;	
 	@Setter private TibjmsAdmin staleConn = null;	
 	@Setter private ServerInfo serverInfo = null;
-	
-//	// Using LinkedHashSet to maintain insertion order and avoid duplicates
-//	private final Set<DestinationInfo> queues = new LinkedHashSet<>();
-//	private final Set<DestinationInfo> topics = new LinkedHashSet<>();
 	
 	public EmsServer(Server yamlServer) {
 		this(yamlServer.getAlias(), yamlServer.getUrl(), yamlServer.getUser(), yamlServer.getPassword(), null, null, null);		
@@ -91,7 +86,8 @@ public class EmsServer {
 	
 	public StatsServer getStatsValues(EmsStatNames emsStats, Date timestamp, long respTime) {
 
-		// Select the destinations that comply with the patterns. Performed here to include destinations created while the monitoring process is running
+		// Select the destinations that comply with the patterns.
+		// Performed here to include destinations created while the monitoring process is running
 		// Using LinkedHashSet to maintain insertion order and avoid duplicates
 		final Set<DestinationInfo> queues = new LinkedHashSet<>();
 		final Set<DestinationInfo> topics = new LinkedHashSet<>();
@@ -105,7 +101,7 @@ public class EmsServer {
 		StatsServer statsServer = new StatsServer(serverInfo);
 
 		// Server stats		
-		statsServer.getStats().putAll(EmsLoggerConstants.getStatsValues(emsStats.getServerStatsNames(), getServerInfo()));
+		statsServer.getStats().putAll(Common.getStatsValues(emsStats.getServerStatsNames(), getServerInfo()));
 		
 		// Queues stats							
 		if (queues != null) {
@@ -125,21 +121,21 @@ public class EmsServer {
 		return statsServer;		
 	}
 	
-	private static List<DestinationStats> getDestinationsStatsValues(EmsStatNames emsStatNames, Set<DestinationInfo> destinations, DestinationType destinationType) {
-		List<DestinationStats> destinationsStats = new ArrayList<>();
+	private static List<StatsDestination> getDestinationsStatsValues(EmsStatNames emsStatNames, Set<DestinationInfo> destinations, DestinationType destinationType) {
+		List<StatsDestination> destinationsStats = new ArrayList<>();
 		for (DestinationInfo destination : destinations) {
 			log.info("Retrieving stats for destination: {}", destination.getName());
 
-			DestinationStats destinationStats = new DestinationStats(destination, destinationType);
+			StatsDestination destinationStats = new StatsDestination(destination, destinationType);
 
 			destinationStats.getStats().putAll(
-					EmsLoggerConstants.getStatsValues(emsStatNames.getQueueStatsNames(), destination));
+					Common.getStatsValues(emsStatNames.getQueueStatsNames(), destination));
 			
 			destinationStats.getStatsInbound().putAll(
-					EmsLoggerConstants.getStatsValues(emsStatNames.getDestinationInboudStatsNames(), destination.getInboundStatistics()));
+					Common.getStatsValues(emsStatNames.getDestinationInboudStatsNames(), destination.getInboundStatistics()));
 			
 			destinationStats.getStatsOutbound().putAll(
-					EmsLoggerConstants.getStatsValues(emsStatNames.getDestinationOutboundStatsNames(), destination.getOutboundStatistics()));
+					Common.getStatsValues(emsStatNames.getDestinationOutboundStatsNames(), destination.getOutboundStatistics()));
 			
 			destinationsStats.add(destinationStats);
 		}
@@ -158,13 +154,13 @@ public class EmsServer {
 			try {
 
 				DestinationInfo[] queueInfos = getTibcoDestinations(destination.getPattern(), destinationType, destination.getPermType(), TibjmsAdmin.DEST_CURSOR_FIRST,
-						EmsLoggerConstants.destCursorSize);
+						Common.destCursorSize);
 				while (queueInfos != null) {
 					for (DestinationInfo queueInfo : queueInfos) {
 						destinationInfoSet.add(queueInfo);
 					}
 					queueInfos = getTibcoDestinations(destination.getPattern(), destinationType, destination.getPermType(), TibjmsAdmin.DEST_CURSOR_NEXT,
-							EmsLoggerConstants.destCursorSize);
+							Common.destCursorSize);
 				}
 			} catch (TibjmsAdminException e) {
 				if (e.getMessage().endsWith("server does not support that command.")) {
@@ -195,7 +191,7 @@ public class EmsServer {
 				break;
 			}
 			
-			if (destinationInfoSet.size() >= EmsLoggerConstants.maxDestinations)
+			if (destinationInfoSet.size() >= Common.maxDestinations)
 				log.warn("getQueues for server " + alias + " pattern " + destination.getPattern() + " returned many queues: "
 						+ destinationInfoSet.size());
 		}
